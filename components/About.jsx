@@ -1,84 +1,59 @@
-import Link from 'next/link';
-import Image from 'next/image';
-
-const sections = [
-  {
-    title: 'Signature Brews',
-    desc: 'From velvety lattes to bold cold brews, every cup is crafted with care and sky-blue magic.',
-    img: 'https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?auto=format&fit=crop&q=80&w=1200',
-    imgAlt: 'Signature cold brew',
-    bg: 'bg-[#e0f2fe]', // sky-100
-    textColor: 'text-slate-900',
-    reverse: false,
-  },
-  {
-    title: 'Artisan Pastries',
-    desc: 'Flaky croissants, dreamy cakes, and shimmering treats baked fresh every morning.',
-    img: 'https://images.unsplash.com/photo-1549903072-7e6e0efeb2fa?auto=format&fit=crop&q=80&w=1200',
-    imgAlt: 'Flaky pastry',
-    bg: 'bg-white',
-    textColor: 'text-slate-900',
-    reverse: true,
-  },
-  {
-    title: 'Premium Teas',
-    desc: 'Butterfly pea flower, matcha, and seasonal blends steeped to perfection for every mood.',
-    img: 'https://images.unsplash.com/photo-1515823662972-da6a2e4d3002?auto=format&fit=crop&q=80&w=1200',
-    imgAlt: 'Premium matcha tea',
-    bg: 'bg-[#bae6fd]', // sky-200
-    textColor: 'text-slate-900',
-    reverse: false,
-  },
-  {
-    title: 'A Sanctuary of Calm',
-    desc: 'We believe every visit should feel special. Our cozy, aesthetically curated space is perfect for good conversations and peaceful moments.',
-    img: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&q=80&w=1200',
-    imgAlt: 'Cozy cafe interior',
-    bg: 'bg-slate-900',
-    textColor: 'text-white',
-    reverse: true,
-  }
-];
+'use client';
 
 export default function About() {
   return (
-    <div className="w-full flex flex-col">
-      {sections.map((sec, idx) => (
-        <section key={idx} className="flex flex-col md:flex-row w-full min-h-[60vh]">
-          {/* Image Side */}
-          <div className={`w-full md:w-1/2 relative min-h-[50vh] md:min-h-full ${sec.reverse ? 'order-1 md:order-2' : 'order-1 md:order-1'}`}>
-            <Image 
-              src={sec.img} 
-              alt={sec.imgAlt} 
-              fill 
-              className="object-cover" 
-              sizes="(max-width: 768px) 100vw, 50vw" 
-            />
-          </div>
+    <section className="relative w-full min-h-screen flex items-center justify-start bg-[#52b1e7] font-sans select-none m-0 p-0 overflow-hidden">
+      
+      {/* --- SPARKLING & FADE-IN CSS ANIMATIONS --- */}
+      <style jsx global>{`
+        @keyframes sparkle {
+          0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
+          50% { transform: scale(1) rotate(180deg); opacity: 1; }
+        }
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(40px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-sparkle-1 { animation: sparkle 3s infinite ease-in-out; }
+        .animate-sparkle-2 { animation: sparkle 2.5s infinite ease-in-out 0.5s; }
+        .animate-sparkle-3 { animation: sparkle 3.5s infinite ease-in-out 1s; }
+        .animate-sparkle-4 { animation: sparkle 2.8s infinite ease-in-out 1.5s; }
+        
+        .animate-fade-in-up {
+          animation: fadeInUp 1.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+      `}</style>
 
-          {/* Text Side */}
-          <div className={`w-full md:w-1/2 ${sec.bg} flex flex-col justify-center items-center p-12 md:p-20 text-center ${sec.reverse ? 'order-2 md:order-1' : 'order-2 md:order-2'}`}>
-            <div className="max-w-md flex flex-col items-center">
-              <h2 className={`text-3xl md:text-5xl font-black tracking-tight mb-6 uppercase ${sec.textColor}`}>
-                {sec.title}
-              </h2>
-              <p className={`text-lg md:text-xl font-medium mb-8 leading-relaxed ${sec.textColor === 'text-white' ? 'text-slate-300' : 'text-slate-700'}`}>
-                {sec.desc}
-              </p>
-              <Link
-                href="/menu"
-                className={`inline-block px-8 py-2.5 rounded-full border-2 font-bold transition-colors ${
-                  sec.textColor === 'text-white' 
-                    ? 'border-white text-white hover:bg-white hover:text-slate-900' 
-                    : 'border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white'
-                }`}
-              >
-                Learn More
-              </Link>
-            </div>
-          </div>
-        </section>
-      ))}
-    </div>
+      {/* --- SPARKLING PARTICLES --- */}
+      <div className="absolute inset-0 pointer-events-none">
+        <svg className="absolute top-[15%] left-[45%] w-6 h-6 text-white fill-current animate-sparkle-1" viewBox="0 0 24 24">
+          <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4Z" />
+        </svg>
+        <svg className="absolute top-[35%] right-[10%] w-8 h-8 text-white fill-current opacity-75 animate-sparkle-2" viewBox="0 0 24 24">
+          <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4Z" />
+        </svg>
+        <svg className="absolute bottom-[20%] left-[35%] w-5 h-5 text-white fill-current opacity-60 animate-sparkle-3" viewBox="0 0 24 24">
+          <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4Z" />
+        </svg>
+        <svg className="absolute bottom-[15%] right-[25%] w-7 h-7 text-white fill-current animate-sparkle-4" viewBox="0 0 24 24">
+          <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4Z" />
+        </svg>
+      </div>
+
+      {/* --- ABOUT CONTENT --- */}
+      <div className="relative z-10 px-8 sm:px-16 md:px-24 max-w-4xl w-full flex flex-col items-start justify-center">
+        <p className="text-3xl sm:text-4xl md:text-5xl font-light tracking-wide normal-case text-white leading-relaxed text-left block opacity-0 animate-fade-in-up">
+  Every cup tells a story. Our cozy pastel-inspired coffee space is crafted for 
+  slow mornings, meaningful conversations, creative energy, and peaceful escapes — 
+  serving handcrafted coffee, fresh pastries, and warm moments in every visit.
+</p>
+      </div>
+    </section>
   );
 }

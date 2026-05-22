@@ -1,45 +1,70 @@
-import Link from 'next/link';
-import Image from 'next/image';
+'use client';
+
+import SplitText from './SplitText'; // Adjust this path based on your folder structure
 
 export default function Hero() {
   return (
-    <section className="flex flex-col md:flex-row w-full min-h-[80vh] md:min-h-[85vh] bg-white">
-      {/* Image Side */}
-      <div className="w-full md:w-1/2 relative min-h-[50vh] md:min-h-full order-1 md:order-2">
-        <Image 
-          src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&q=80&w=1600" 
-          fill 
-          className="object-cover" 
-          alt="Delicious blue matcha latte" 
-          sizes="(max-width: 768px) 100vw, 50vw" 
-          priority 
-        />
+    <section className="relative w-full min-h-screen flex items-center justify-center bg-[#52b1e7] font-sans select-none m-0 p-0 overflow-hidden">
+      
+      {/* --- SPARKLING CSS ANIMATIONS --- */}
+      <style jsx global>{`
+        @keyframes sparkle {
+          0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
+          50% { transform: scale(1) rotate(180deg); opacity: 1; }
+        }
+        .animate-sparkle-1 { animation: sparkle 3s infinite ease-in-out; }
+        .animate-sparkle-2 { animation: sparkle 2.5s infinite ease-in-out 0.5s; }
+        .animate-sparkle-3 { animation: sparkle 3.5s infinite ease-in-out 1s; }
+        .animate-sparkle-4 { animation: sparkle 2.8s infinite ease-in-out 1.5s; }
+      `}</style>
+
+      {/* --- SPARKLING PARTICLES --- */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Sparkle 1 - Top Left */}
+        <svg className="absolute top-[25%] left-[15%] w-6 h-6 text-white fill-current animate-sparkle-1" viewBox="0 0 24 24">
+          <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4Z" />
+        </svg>
+        {/* Sparkle 2 - Top Right */}
+        <svg className="absolute top-[20%] right-[18%] w-8 h-8 text-white fill-current opacity-75 animate-sparkle-2" viewBox="0 0 24 24">
+          <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4Z" />
+        </svg>
+        {/* Sparkle 3 - Bottom Left */}
+        <svg className="absolute bottom-[30%] left-[20%] w-5 h-5 text-white fill-current opacity-60 animate-sparkle-3" viewBox="0 0 24 24">
+          <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4Z" />
+        </svg>
+        {/* Sparkle 4 - Bottom Right */}
+        <svg className="absolute bottom-[25%] right-[12%] w-7 h-7 text-white fill-current animate-sparkle-4" viewBox="0 0 24 24">
+          <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4Z" />
+        </svg>
       </div>
 
-      {/* Text Side */}
-      <div className="w-full md:w-1/2 bg-sky-100 flex flex-col justify-center items-center p-12 md:p-24 text-center order-2 md:order-1">
-        <div className="max-w-xl flex flex-col items-center">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-slate-800 tracking-tighter leading-[1.1] mb-6 uppercase">
-            Taste the cloud
-          </h1>
-          <p className="text-xl md:text-2xl text-slate-700 mb-10 font-medium">
-            Handcrafted drinks and sparkling pastries made with love. Step into our sky-blue sanctuary today.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            <Link
-              href="/menu"
-              className="inline-block px-8 py-3 rounded-full border-2 border-transparent bg-slate-900 text-white font-bold hover:bg-slate-800 transition-colors"
-            >
-              Explore Our Menu
-            </Link>
-            <Link
-              href="/register"
-              className="inline-block px-8 py-3 rounded-full border-2 border-slate-900 text-slate-900 font-bold hover:bg-slate-100 transition-colors"
-            >
-              Join the Club
-            </Link>
-          </div>
-        </div>
+      {/* --- HERO CONTENT --- */}
+      <div className="relative z-10 text-center px-4 max-w-6xl">
+        {/* Main Header Tag */}
+        <SplitText
+          tag="h1"
+          text="Your new coffee spot."
+          className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-white tracking-tight leading-none uppercase"
+          splitType="chars,words"
+          delay={40}
+          duration={1.2}
+          from={{ opacity: 0, y: 50 }}
+          to={{ opacity: 1, y: 0 }}
+          ease="power4.out"
+        />
+
+        {/* Subtitle Tag */}
+        <SplitText
+          tag="span"
+          text="Where moments are brewed."
+          className="block text-3xl sm:text-4xl md:text-5xl font-light tracking-wide mt-6 opacity-90 normal-case text-white"
+          splitType="words"
+          delay={60}
+          duration={1.4}
+          from={{ opacity: 0, y: 30 }}
+          to={{ opacity: 1, y: 0 }}
+          ease="power3.out"
+        />
       </div>
     </section>
   );

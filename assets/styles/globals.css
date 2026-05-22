@@ -15,6 +15,8 @@
 
   --font-outfit: 'Outfit', sans-serif;
   --font-playfair: 'Playfair Display', serif;
+  /* Added for the high-impact compressed base state */
+  --font-impact: 'Impact', 'Arial Black', 'Arial Bold', sans-serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -33,6 +35,14 @@ body {
   font-family: var(--font-outfit);
   min-height: 100vh;
   overflow-x: hidden;
+}
+
+/* Custom font utilities to match your menu demands */
+.font-impact {
+  font-family: var(--font-impact);
+}
+.font-serif {
+  font-family: var(--font-playfair);
 }
 
 /* Glass Panels */

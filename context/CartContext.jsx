@@ -39,7 +39,6 @@ export function CartProvider({ children }) {
       }
       return [...prevItems, { ...item, quantity: 1 }];
     });
-    setIsCartOpen(true); // Auto-open cart when adding items
   };
 
   const removeFromCart = (itemId) => {

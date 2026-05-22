@@ -3,6 +3,7 @@
 import { useCart } from '@/context/CartContext';
 import { FiX, FiPlus, FiMinus, FiShoppingCart } from 'react-icons/fi';
 import Image from 'next/image';
+import { getSupabaseImageUrl } from '@/utils/supabase/getSupabaseImageUrl';
 
 export default function CartSidebar() {
   const {
@@ -59,9 +60,9 @@ export default function CartSidebar() {
             cartItems.map((item) => (
               <div key={item.id} className="flex gap-4 items-center bg-white p-3 rounded-xl shadow-sm border border-slate-50">
                 <div className="relative w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-sky-50">
-                  {item.image_url && (
+                  {getSupabaseImageUrl(item.image_url) && (
                     <Image
-                      src={item.image_url}
+                      src={getSupabaseImageUrl(item.image_url)}
                       alt={item.name}
                       fill
                       className="object-cover"

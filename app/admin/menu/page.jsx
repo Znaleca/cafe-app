@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase/client';
 import { uploadImage } from '@/actions/uploadImage';
+import { getSupabaseImageUrl } from '@/utils/supabase/getSupabaseImageUrl';
 import { FiEdit2, FiTrash2, FiCoffee, FiPlus } from 'react-icons/fi';
 import Image from 'next/image';
 
@@ -187,7 +188,7 @@ export default function MenuManagementPage() {
                     <tr key={item.id} className="hover:bg-sky-50/50 transition-colors">
                       <td className="py-4 flex items-center gap-4">
                         <div className="w-12 h-12 rounded-lg bg-sky-100 relative overflow-hidden shrink-0 border border-slate-100">
-                          {item.image_url && <Image src={item.image_url} alt={item.name} fill className="object-cover" sizes="48px" />}
+                          {getSupabaseImageUrl(item.image_url) && <Image src={getSupabaseImageUrl(item.image_url)} alt={item.name} fill className="object-cover" sizes="48px" />}
                         </div>
                         <div>
                           <p className="font-bold text-slate-800">{item.name}</p>

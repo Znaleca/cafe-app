@@ -1,16 +1,18 @@
 import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
 import { FiPlus } from 'react-icons/fi';
+import { getSupabaseImageUrl } from '@/utils/supabase/getSupabaseImageUrl';
 
 export default function MenuCard({ item, priority = false }) {
   const { addToCart } = useCart();
+  const imageUrl = getSupabaseImageUrl(item.image_url);
 
   return (
     <div className="bg-white border-2 border-slate-100 overflow-hidden flex flex-col h-full hover:shadow-xl transition-shadow duration-300 group">
       <div className="relative h-56 w-full bg-sky-50 shrink-0 overflow-hidden">
-        {item.image_url ? (
+          {imageUrl ? (
             <Image
-              src={item.image_url}
+            src={imageUrl}
               alt={item.name}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-500"
