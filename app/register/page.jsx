@@ -4,11 +4,12 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { registerUser } from '@/actions/registerUser';
 import { BiCoffeeTogo } from 'react-icons/bi';
-import { FiMail, FiLock, FiCheckCircle } from 'react-icons/fi';
+import { FiMail, FiLock, FiCheckCircle, FiSmile } from 'react-icons/fi';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [nickname, setNickname] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -19,7 +20,7 @@ export default function RegisterPage() {
     setMessage('');
 
     try {
-      await registerUser(email, password);
+      await registerUser(email, password, nickname);
       setSuccess(true);
       setMessage('Registration successful! Please check your email to verify your account.');
     } catch (error) {
@@ -68,11 +69,34 @@ export default function RegisterPage() {
               )}
 
               <form onSubmit={handleRegister} className="space-y-5">
+                {/* Nickname */}
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">Email</label>
+                  <label htmlFor="register_nickname" className="block text-sm font-semibold text-slate-700 mb-2">
+                    Nickname
+                  </label>
+                  <div className="relative">
+                    <FiSmile className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+                    <input
+                      id="register_nickname"
+                      type="text"
+                      value={nickname}
+                      onChange={(e) => setNickname(e.target.value)}
+                      required
+                      className="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 bg-white/70 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition-all text-slate-800 placeholder:text-slate-300"
+                      placeholder="What should we call you?"
+                    />
+                  </div>
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label htmlFor="register_email" className="block text-sm font-semibold text-slate-700 mb-2">
+                    Email
+                  </label>
                   <div className="relative">
                     <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
                     <input
+                      id="register_email"
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -83,11 +107,15 @@ export default function RegisterPage() {
                   </div>
                 </div>
 
+                {/* Password */}
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">Password</label>
+                  <label htmlFor="register_password" className="block text-sm font-semibold text-slate-700 mb-2">
+                    Password
+                  </label>
                   <div className="relative">
                     <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
                     <input
+                      id="register_password"
                       type="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}

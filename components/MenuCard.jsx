@@ -3,46 +3,67 @@ import { useCart } from '@/context/CartContext';
 import { FiPlus } from 'react-icons/fi';
 import { getSupabaseImageUrl } from '@/utils/supabase/getSupabaseImageUrl';
 
-export default function MenuCard({ item, priority = false }) {
+export default function MenuCard({ item, role }) {
   const { addToCart } = useCart();
   const imageUrl = getSupabaseImageUrl(item.image_url);
 
   return (
-    <div className="bg-white border-2 border-slate-100 overflow-hidden flex flex-col h-full hover:shadow-xl transition-shadow duration-300 group">
-      <div className="relative h-56 w-full bg-sky-50 shrink-0 overflow-hidden">
-          {imageUrl ? (
-            <Image
+    <div className="flex gap-4 sm:gap-6 items-start p-4 bg-white hover:bg-white/60 rounded-2xl border border-slate-100/50 hover:border-slate-200 transition-all duration-300 group">
+      
+      {/* Mini Profile Thumbnail Image */}
+      <div className="relative h-20 w-20 sm:h-24 sm:w-24 bg-slate-100 rounded-xl shrink-0 overflow-hidden shadow-sm">
+        {imageUrl ? (
+          <Image
             src={imageUrl}
-              alt={item.name}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-500"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              priority={priority}
-            />
+            alt={item.name}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+            sizes="(max-width: 768px) 80px, 96px"
+            priority
+          />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center text-sky-300 font-bold uppercase tracking-widest text-xs">
-            No Image
+          <div className="absolute inset-0 flex items-center justify-center bg-slate-50 text-[9px] text-slate-400 font-black uppercase tracking-tighter">
+            No Item Image
           </div>
         )}
       </div>
-      <div className="p-6 flex flex-col flex-grow">
-        <div className="flex justify-between items-start mb-2">
-          <h3 className="text-2xl font-black text-slate-900 leading-tight pr-4">{item.name}</h3>
-          <span className="text-lg font-black text-sky-600">
+
+      {/* Structural Menu Details Column */}
+      <div className="flex-grow min-w-0 self-center">
+        
+        {/* Title / Leader Line / Pricing Alignment Row */}
+        <div className="flex items-baseline justify-between gap-2">
+          <h3 className="text-base sm:text-lg font-black text-slate-900 tracking-tight truncate group-hover:text-[#52b1e7] transition-colors duration-300">
+            {item.name}
+          </h3>
+          
+          {/* Classic Café Leader Dot-Line Connector */}
+          <div className="grow border-b border-dashed border-slate-200 mx-2 hidden sm:block" />
+          
+          <span className="text-base sm:text-lg font-black text-slate-900 shrink-0">
             ${Number(item.price).toFixed(2)}
           </span>
         </div>
-        <p className="text-xs uppercase tracking-widest text-slate-400 font-bold mb-4">{item.category}</p>
-        <p className="text-slate-600 line-clamp-2 flex-grow font-medium leading-relaxed">{item.description}</p>
         
-        <button
-          onClick={() => addToCart(item)}
-          className="mt-8 w-full py-3.5 bg-white border-2 border-slate-900 text-slate-900 rounded-full font-bold uppercase tracking-wide hover:bg-slate-900 hover:text-white transition-colors flex items-center justify-center gap-2 active:scale-95"
-        >
-          <FiPlus className="w-5 h-5" />
-          Add to Cart
-        </button>
+        {/* Description line */}
+        <p className="text-slate-500 text-xs sm:text-sm font-medium line-clamp-2 mt-1 pr-6 leading-relaxed">
+          {item.description}
+        </p>
       </div>
+
+      {/* Minimal Action Trigger Button */}
+      {role !== 'admin' && (
+        <div className="self-center shrink-0 pl-2">
+          <button
+            onClick={() => addToCart(item)}
+            title="Add to Cart"
+            className="p-2.5 sm:p-3 bg-slate-900 text-white rounded-xl hover:bg-[#52b1e7] shadow-sm transition-all duration-300 flex items-center justify-center transform active:scale-90"
+          >
+            <FiPlus className="w-4 h-4 stroke-[3]" />
+          </button>
+        </div>
+      )}
+
     </div>
   );
 }

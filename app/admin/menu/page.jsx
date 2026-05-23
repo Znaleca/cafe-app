@@ -4,8 +4,26 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase/client';
 import { uploadImage } from '@/actions/uploadImage';
 import { getSupabaseImageUrl } from '@/utils/supabase/getSupabaseImageUrl';
-import { FiEdit2, FiTrash2, FiCoffee, FiPlus } from 'react-icons/fi';
+import { FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi';
 import Image from 'next/image';
+import LoadingComponent from '@/components/Loading';
+
+// Custom Transparent Plastic Cup Icon
+const PlasticCupIcon = ({ className = "w-6 h-6" }) => (
+  <svg viewBox="0 0 100 100" className={className} xmlns="http://www.w3.org/2000/svg">
+    {/* Background/Liquid (transparent color) */}
+    <path d="M31 45 L37 85 C37.5 89 39 91 44 91 L56 91 C61 91 62.5 89 63 85 L69 45 Z" fill="currentColor" fillOpacity="0.2" />
+    {/* Straw */}
+    <rect x="47" y="10" width="5" height="80" rx="2.5" fill="currentColor" fillOpacity="0.6" transform="rotate(12, 50, 50)" />
+    {/* Cup Body (Transparent with border) */}
+    <path d="M28 35 L38 90 C38.5 94 41 95 44 95 L56 95 C59 95 61.5 94 62 90 L72 35 Z" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+    {/* Lid */}
+    <path d="M24 35 Q50 20 76 35 L78 38 L22 38 Z" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+    {/* Cup Highlights / Indentations */}
+    <line x1="42" y1="45" x2="45" y2="85" stroke="currentColor" strokeWidth="2" strokeOpacity="0.3" strokeLinecap="round" />
+    <line x1="58" y1="45" x2="55" y2="85" stroke="currentColor" strokeWidth="2" strokeOpacity="0.3" strokeLinecap="round" />
+  </svg>
+);
 
 export default function MenuManagementPage() {
   const [activeTab, setActiveTab] = useState('menu'); // 'menu', 'add'
@@ -13,14 +31,14 @@ export default function MenuManagementPage() {
   const [menuItems, setMenuItems] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
 
-  // Add Item State
-  const [formData, setFormData] = useState({ name: '', description: '', price: '', category: 'Coffee' });
+  // Add Item State - Defaults to 'Quick Bites'
+  const [formData, setFormData] = useState({ name: '', description: '', price: '', category: 'Quick Bites' });
   const [imageFile, setImageFile] = useState(null);
   const [message, setMessage] = useState('');
 
   // Edit Item State
   const [editingItem, setEditingItem] = useState(null);
-  const [editFormData, setEditFormData] = useState({ name: '', description: '', price: '', category: 'Coffee' });
+  const [editFormData, setEditFormData] = useState({ name: '', description: '', price: '', category: 'Quick Bites' });
   const [editImageFile, setEditImageFile] = useState(null);
   const [editMessage, setEditMessage] = useState('');
 
@@ -73,7 +91,7 @@ export default function MenuManagementPage() {
       }
       
       setMessage('Item added successfully!');
-      setFormData({ name: '', description: '', price: '', category: 'Coffee' });
+      setFormData({ name: '', description: '', price: '', category: 'Quick Bites' });
       setImageFile(null);
       const fileInput = document.getElementById('add_image_upload');
       if (fileInput) fileInput.value = '';
@@ -139,15 +157,25 @@ export default function MenuManagementPage() {
 
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="text-4xl font-black text-slate-800 tracking-tight">Menu Management</h1>
-        <p className="text-slate-500 mt-1">Add, edit, or remove items from your cafe's menu.</p>
+      {/* Hero Header */}
+      <div className="bg-[#52b1e7] rounded-[2.5rem] p-10 text-white relative overflow-hidden mb-8 shadow-xl shadow-sky-900/5">
+        <div className="absolute -right-16 -top-16 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl pointer-events-none" />
+        <svg className="absolute top-[20%] right-[12%] w-6 h-6 text-white fill-current animate-[sparkle_3.2s_infinite_ease-in-out] pointer-events-none" viewBox="0 0 24 24">
+          <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4Z" />
+        </svg>
+        <div className="relative z-10">
+          <span className="text-xs font-bold tracking-[0.3em] uppercase text-white/70 block mb-3">Admin Panel</span>
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase mb-2 leading-none">
+            Menu <span className="font-serif font-light lowercase italic tracking-normal text-sky-100">management.</span>
+          </h1>
+          <p className="text-base font-light text-sky-50/90 tracking-wide">Add, edit, or remove items from your cafe&apos;s menu.</p>
+        </div>
       </div>
 
       {/* TABS */}
       <div className="flex space-x-2 mb-8 bg-slate-100 p-1.5 rounded-2xl w-fit">
         {[
-          { id: 'menu', label: 'Manage Menu', icon: FiCoffee },
+          { id: 'menu', label: 'Manage Menu', icon: PlasticCupIcon },
           { id: 'add', label: 'Add Item', icon: FiPlus }
         ].map((tab) => (
           <button
@@ -169,7 +197,7 @@ export default function MenuManagementPage() {
       {activeTab === 'menu' && !editingItem && (
         <div className="glass-panel p-8 rounded-3xl">
           {isFetching ? (
-            <div className="text-center py-12 text-slate-400">Loading menu items...</div>
+            <LoadingComponent text="Loading menu items..." />
           ) : menuItems.length === 0 ? (
             <div className="text-center py-12 text-slate-400">No items found. Add some!</div>
           ) : (
@@ -187,8 +215,12 @@ export default function MenuManagementPage() {
                   {menuItems.map(item => (
                     <tr key={item.id} className="hover:bg-sky-50/50 transition-colors">
                       <td className="py-4 flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-lg bg-sky-100 relative overflow-hidden shrink-0 border border-slate-100">
-                          {getSupabaseImageUrl(item.image_url) && <Image src={getSupabaseImageUrl(item.image_url)} alt={item.name} fill className="object-cover" sizes="48px" />}
+                        <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-sky-100 relative overflow-hidden shrink-0 border border-slate-100 text-sky-400">
+                          {getSupabaseImageUrl(item.image_url) ? (
+                            <Image src={getSupabaseImageUrl(item.image_url)} alt={item.name} fill className="object-cover" sizes="48px" priority />
+                          ) : (
+                            <PlasticCupIcon className="w-7 h-7" /> // Fallback transparent cup icon if no image!
+                          )}
                         </div>
                         <div>
                           <p className="font-bold text-slate-800">{item.name}</p>
@@ -196,7 +228,7 @@ export default function MenuManagementPage() {
                         </div>
                       </td>
                       <td className="py-4">
-                        <span className="tag-pill bg-sky-100/50 text-sky-700">{item.category}</span>
+                        <span className="tag-pill bg-sky-100/50 text-sky-700 whitespace-nowrap">{item.category}</span>
                       </td>
                       <td className="py-4 font-bold text-sky-600">${Number(item.price).toFixed(2)}</td>
                       <td className="py-4 text-right space-x-2">
@@ -237,7 +269,13 @@ export default function MenuManagementPage() {
               <div>
                 <label className="block text-sm font-bold text-slate-700 mb-1">Category</label>
                 <select value={editFormData.category} onChange={(e) => setEditFormData({...editFormData, category: e.target.value})} className="w-full px-4 py-2.5 rounded-xl border border-sky-100 bg-white/70 focus:outline-none focus:ring-2 focus:ring-sky-400">
-                  <option value="Coffee">Coffee</option><option value="Tea">Tea</option><option value="Pastry">Pastry</option><option value="Merch">Merch</option>
+                  <option value="Quick Bites">Quick Bites</option>
+                  <option value="Hearty Meals">Hearty Meals</option>
+                  <option value="Pasta Picks">Pasta Picks</option>
+                  <option value="Sweet Treats">Sweet Treats</option>
+                  <option value="Coffee-Based">Coffee-Based</option>
+                  <option value="Non-Coffee">Non-Coffee</option>
+                  <option value="Specials">Specials</option>
                 </select>
               </div>
             </div>
@@ -278,7 +316,13 @@ export default function MenuManagementPage() {
               <div>
                 <label className="block text-sm font-bold text-slate-700 mb-1">Category</label>
                 <select name="category" value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} className="w-full px-4 py-2.5 rounded-xl border border-sky-100 bg-white/70 focus:outline-none focus:ring-2 focus:ring-sky-400">
-                  <option value="Coffee">Coffee</option><option value="Tea">Tea</option><option value="Pastry">Pastry</option><option value="Merch">Merch</option>
+                  <option value="Quick Bites">Quick Bites</option>
+                  <option value="Hearty Meals">Hearty Meals</option>
+                  <option value="Pasta Picks">Pasta Picks</option>
+                  <option value="Sweet Treats">Sweet Treats</option>
+                  <option value="Coffee-Based">Coffee-Based</option>
+                  <option value="Non-Coffee">Non-Coffee</option>
+                  <option value="Specials">Specials</option>
                 </select>
               </div>
             </div>

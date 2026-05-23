@@ -40,9 +40,19 @@ export default function AccountsManagementPage() {
 
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="text-4xl font-black text-slate-800 tracking-tight">User Accounts</h1>
-        <p className="text-slate-500 mt-1">Manage user roles and permissions.</p>
+      {/* Hero Header */}
+      <div className="bg-[#52b1e7] rounded-[2.5rem] p-10 text-white relative overflow-hidden mb-8 shadow-xl shadow-sky-900/5">
+        <div className="absolute -right-16 -top-16 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl pointer-events-none" />
+        <svg className="absolute top-[20%] right-[12%] w-6 h-6 text-white fill-current animate-[sparkle_3.2s_infinite_ease-in-out] pointer-events-none" viewBox="0 0 24 24">
+          <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4Z" />
+        </svg>
+        <div className="relative z-10">
+          <span className="text-xs font-bold tracking-[0.3em] uppercase text-white/70 block mb-3">Admin Panel</span>
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase mb-2 leading-none">
+            User <span className="font-serif font-light lowercase italic tracking-normal text-sky-100">accounts.</span>
+          </h1>
+          <p className="text-base font-light text-sky-50/90 tracking-wide">Manage user roles and permissions.</p>
+        </div>
       </div>
 
       <div className="glass-panel p-8 rounded-3xl">

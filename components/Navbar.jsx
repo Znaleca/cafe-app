@@ -66,8 +66,15 @@ export default function Navbar() {
     const items = [
       { label: 'Home', href: '/' },
       { label: 'Menu', href: '/menu' },
-      { label: 'Cart', href: '/cart' },
     ];
+
+    if (role !== 'admin') {
+      items.push({ label: 'Cart', href: '/cart' });
+    }
+
+    if (user && role !== 'admin') {
+      items.push({ label: 'My Orders', href: '/orders' });
+    }
 
     if (user && role === 'admin') {
       items.push({ label: 'Admin', href: '/admin' });
@@ -115,7 +122,8 @@ export default function Navbar() {
     closeTlRef.current.to(panelItemRefs.current.filter(Boolean), { yPercent: 40, opacity: 0, duration: 0.25, stagger: 0.01 }, 0);
     closeTlRef.current.to(all, { yPercent: 100, duration: 0.5, stagger: 0.02 }, 0.02);
     
-    closeTlRef.current.to(toggleBtnRef.current, { backgroundColor: '#ffffff', color: '#0284c7', duration: 0.3 }, 0); 
+    // BACK TO HAMBURGER STATE: Changes button background back to white, lines back to brand blue
+    closeTlRef.current.to(toggleBtnRef.current, { backgroundColor: '#ffffff', color: '#52b1e7', duration: 0.3 }, 0); 
     closeTlRef.current.to(lineTopRef.current, { y: 0, rotate: 0, duration: 0.3 }, 0);
     closeTlRef.current.to(lineMiddleRef.current, { opacity: 1, scaleX: 1, duration: 0.2 }, 0);
     closeTlRef.current.to(lineBottomRef.current, { y: 0, rotate: 0, duration: 0.3 }, 0);
@@ -157,7 +165,8 @@ export default function Navbar() {
     tl.to(panel, { yPercent: 0, duration: 0.7, ease: 'power4.out' }, layers.length * 0.04 + 0.01);
     tl.to(items, { yPercent: 0, opacity: 1, duration: 0.55, stagger: 0.03, ease: 'power2.out' }, '-=0.35');
     
-    tl.to(toggleBtnRef.current, { backgroundColor: '#0c4a6e', color: '#ffffff', duration: 0.25 }, 0); 
+    // TO ACTIVE "X" STATE: Smoothly turns button background brand blue, icon lines become white
+    tl.to(toggleBtnRef.current, { backgroundColor: '#52b1e7', color: '#ffffff', duration: 0.25 }, 0); 
     tl.to(lineTopRef.current, { y: 6, rotate: 45, duration: 0.25 }, 0);
     tl.to(lineMiddleRef.current, { opacity: 0, scaleX: 0, duration: 0.15 }, 0);
     tl.to(lineBottomRef.current, { y: -6, rotate: -45, duration: 0.25 }, 0);
@@ -192,6 +201,15 @@ export default function Navbar() {
     },
     [closeMenu, handleSignOut, router]
   );
+
+  const handleHomeClick = useCallback((event) => {
+    closeMenu();
+
+    if (pathname === '/') {
+      event.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [closeMenu, pathname]);
 
   useLayoutEffect(() => {
     const panel = panelRef.current;
@@ -259,27 +277,28 @@ export default function Navbar() {
             <Link
               href="/"
               aria-label="Her&Her Cafe Home"
-              onClick={closeMenu}
+              onClick={handleHomeClick}
               className="flex flex-col items-center justify-center text-center select-none whitespace-nowrap"
             >
+              {/* Changed main branding text classes to pristine white */}
               <span className="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter text-white leading-none">
-                Her<span className="font-serif font-light lowercase italic tracking-normal text-sky-100">&</span>Her
+                Her<span className="font-serif font-light lowercase italic tracking-normal text-white/80">&</span>Her
               </span>
-              <span className="text-sm md:text-base font-light tracking-[0.3em] uppercase text-sky-50 mt-1 block">
+              <span className="text-sm md:text-base font-light tracking-[0.3em] uppercase text-white/90 mt-1 block">
                 Cafe
               </span>
             </Link>
           )}
         </div>
 
-        {/* Drawer Toggle Control Button without Shadows/Animations */}
+        {/* Toggle Action Control Button */}
         <button
           ref={toggleBtnRef}
           onClick={toggleMenu}
           aria-label={open ? 'Close menu' : 'Open menu'}
           aria-expanded={open}
           aria-controls="staggered-menu-panel"
-          className="justify-self-end flex h-12 w-12 flex-col items-center justify-center gap-[4px] rounded-full bg-white text-sky-950"
+          className="justify-self-end flex h-12 w-12 flex-col items-center justify-center gap-[4px] rounded-full bg-white text-[#52b1e7] shadow-sm"
           type="button"
         >
           <span ref={lineTopRef} className="h-[2px] w-4 bg-current transform-gpu" />
@@ -288,9 +307,9 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Transitional Background Slide Layers */}
+      {/* Transitional Slide Layers */}
       <div ref={preLayersRef} className="pointer-events-none fixed inset-0 z-[5]" aria-hidden="true">
-        {['#f0f9ff', '#e0f2fe', '#bae6fd'].map((color, index) => (
+        {['#e0f2fe', '#bae6fd', '#7dd3fc'].map((color, index) => (
           <div
             key={color}
             className="sm-prelayer absolute inset-0 h-full w-full"
@@ -303,7 +322,7 @@ export default function Navbar() {
       <aside
         id="staggered-menu-panel"
         ref={panelRef}
-        className="pointer-events-auto fixed inset-0 z-20 flex h-screen w-screen flex-col overflow-y-auto bg-[#52b1e7] px-6 py-12 md:px-16 lg:px-24"
+        className="pointer-events-auto fixed inset-0 z-20 flex h-screen w-screen flex-col overflow-y-auto bg-white px-6 py-12 md:px-16 lg:px-24"
         aria-hidden={!open}
       >
         <div className="mx-auto flex h-full w-full max-w-full flex-col justify-center">
@@ -319,7 +338,7 @@ export default function Navbar() {
                       ref={(el) => { panelItemRefs.current[index] = el; }}
                       type="button"
                       onClick={() => handleMenuAction(item.href)}
-                      className="nav-target sm-panel-itemLabel group/item relative inline-flex items-center justify-center w-fit text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tight text-white transition-colors duration-300 group-has-[.nav-target:hover]:text-white/30 hover:!text-white"
+                      className="nav-target sm-panel-itemLabel group/item relative inline-flex items-center justify-center w-fit text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tight text-[#52b1e7] transition-colors duration-300 group-has-[.nav-target:hover]:text-[#52b1e7]/30 hover:!text-[#52b1e7]"
                     >
                       <span className="transition-all duration-300 group-hover/item:opacity-0 group-hover/item:scale-90 flex items-center gap-4">
                         {item.label} <FiLogOut className="h-6 w-6 md:h-8 md:w-8" />
@@ -332,8 +351,8 @@ export default function Navbar() {
                     <Link
                       ref={(el) => { panelItemRefs.current[index] = el; }}
                       href={item.href}
-                      onClick={closeMenu}
-                      className="nav-target sm-panel-itemLabel group/item relative inline-flex items-center justify-center w-fit text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tight text-white transition-colors duration-300 group-has-[.nav-target:hover]:text-white/30 hover:!text-white"
+                      onClick={item.href === '/' ? handleHomeClick : closeMenu}
+                      className="nav-target sm-panel-itemLabel group/item relative inline-flex items-center justify-center w-fit text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tight text-[#52b1e7] transition-colors duration-300 group-has-[.nav-target:hover]:text-[#52b1e7]/30 hover:!text-[#52b1e7]"
                     >
                       <span className="transition-all duration-300 group-hover/item:opacity-0 group-hover/item:scale-90 flex items-center gap-4">
                         {item.label}

@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
 import SplitText from './SplitText'; // Adjust this path based on your folder structure
 
 export default function Hero() {
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center bg-[#52b1e7] font-sans select-none m-0 p-0 overflow-hidden">
+    <section id="home-hero" className="relative w-full min-h-screen flex items-center justify-center bg-[#52b1e7] font-sans select-none m-0 p-0 overflow-hidden">
       
       {/* --- SPARKLING CSS ANIMATIONS --- */}
       <style jsx global>{`
